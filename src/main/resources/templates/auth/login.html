@@ -36,17 +36,15 @@
                     </div>
                     <div class="card-body p-4">
                         <!-- Mensajes de error -->
-                        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
                             <i class="bi bi-exclamation-triangle me-2"></i>
                             <span th:text="${errorMessage}">Error</span>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                         
                         <!-- Mensajes de éxito -->
-                        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <div th:if="${successMessage}" class="alert alert-success" role="alert">
                             <i class="bi bi-check-circle me-2"></i>
                             <span th:text="${successMessage}">Éxito</span>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
 
                         <!-- Formulario de login -->
@@ -81,11 +79,9 @@
                                            name="password" 
                                            placeholder="Tu contraseña"
                                            required>
-                                    <button class="btn btn-outline-secondary" 
-                                            type="button" 
-                                            onclick="togglePassword()">
-                                        <i class="bi bi-eye" id="toggleIcon"></i>
-                                    </button>
+                                    <span class="input-group-text">
+                                        <i class="bi bi-lock"></i>
+                                    </span>
                                 </div>
                                 <div class="invalid-feedback">
                                     La contraseña es obligatoria.
@@ -148,50 +144,5 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Script para mostrar/ocultar contraseña SIN archivo JS externo -->
-    <script>
-        // Función para mostrar/ocultar contraseña
-        function togglePassword() {
-            const passwordField = document.getElementById('password');
-            const toggleIcon = document.getElementById('toggleIcon');
-            
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.className = 'bi bi-eye-slash';
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.className = 'bi bi-eye';
-            }
-        }
-
-        // Validación de formulario
-        (function() {
-            'use strict';
-            window.addEventListener('load', function() {
-                const forms = document.getElementsByClassName('needs-validation');
-                const validation = Array.prototype.filter.call(forms, function(form) {
-                    form.addEventListener('submit', function(event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-            }, false);
-        })();
-
-        // Auto-dismiss alerts después de 5 segundos
-        setTimeout(function() {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(function(alert) {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            });
-        }, 5000);
-    </script>
 </body>
 </html>

@@ -31,7 +31,7 @@ public class HeroesController {
             model.addAttribute("heroes", heroeNavalService.buscar(termino.trim()));
             model.addAttribute("terminoBusqueda", termino);
         } else {
-            model.addAttribute("heroes", heroeNavalService.listarHeroesCompletos());
+            model.addAttribute("heroes", heroeNavalService.listarTodos());
         }
         
         model.addAttribute("totalHeroes", heroeNavalService.contarTotal());

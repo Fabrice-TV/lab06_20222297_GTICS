@@ -37,43 +37,40 @@
                     </div>
                     <div class="card-body p-4">
                         <!-- Mensajes -->
-                        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
                             <i class="bi bi-exclamation-triangle me-2"></i>
                             <span th:text="${errorMessage}">Error</span>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                         
-                        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <div th:if="${successMessage}" class="alert alert-success" role="alert">
                             <i class="bi bi-check-circle me-2"></i>
                             <span th:text="${successMessage}">Éxito</span>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
 
                         <!-- Formulario de registro -->
-                        <form th:action="@{/registro}" th:object="${usuario}" method="post" class="needs-validation" novalidate>
+                        <form th:action="@{/registro}" th:object="${usuario}" method="post">
                             <div class="row">
                                 <!-- Nombre -->
                                 <div class="col-md-12 mb-3">
                                     <label for="nombre" class="form-label">
                                         <i class="bi bi-person me-1"></i>
-                                        Nombre Completo
+                                        Nombre Completo *
                                     </label>
                                     <input type="text" 
                                            class="form-control" 
                                            id="nombre" 
                                            th:field="*{nombre}"
                                            placeholder="Ingresa tu nombre completo"
+                                           minlength="2"
                                            required>
-                                    <div class="invalid-feedback">
-                                        El nombre es obligatorio (mínimo 2 caracteres).
-                                    </div>
+                                    <small class="form-text text-muted">Mínimo 2 caracteres</small>
                                 </div>
 
                                 <!-- Email -->
                                 <div class="col-md-12 mb-3">
                                     <label for="correo" class="form-label">
                                         <i class="bi bi-envelope me-1"></i>
-                                        Correo Electrónico
+                                        Correo Electrónico *
                                     </label>
                                     <input type="email" 
                                            class="form-control" 
@@ -81,9 +78,6 @@
                                            th:field="*{correo}"
                                            placeholder="ejemplo@correo.com"
                                            required>
-                                    <div class="invalid-feedback">
-                                        Ingresa un correo electrónico válido.
-                                    </div>
                                     <small class="text-muted">
                                         Usaremos este correo para iniciar sesión.
                                     </small>
@@ -93,49 +87,32 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="password" class="form-label">
                                         <i class="bi bi-lock me-1"></i>
-                                        Contraseña
+                                        Contraseña *
                                     </label>
-                                    <div class="input-group">
-                                        <input type="password" 
-                                               class="form-control" 
-                                               id="password" 
-                                               th:field="*{password}"
-                                               placeholder="Mínimo 6 caracteres"
-                                               minlength="6"
-                                               required>
-                                        <button class="btn btn-outline-secondary" 
-                                                type="button" 
-                                                onclick="togglePassword('password', 'toggleIcon1')">
-                                            <i class="bi bi-eye" id="toggleIcon1"></i>
-                                        </button>
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        La contraseña debe tener al menos 6 caracteres.
-                                    </div>
+                                    <input type="password" 
+                                           class="form-control" 
+                                           id="password" 
+                                           th:field="*{password}"
+                                           placeholder="Mínimo 6 caracteres"
+                                           minlength="6"
+                                           required>
+                                    <small class="form-text text-muted">Mínimo 6 caracteres</small>
                                 </div>
 
                                 <!-- Confirmar contraseña -->
                                 <div class="col-md-6 mb-3">
                                     <label for="confirmPassword" class="form-label">
                                         <i class="bi bi-lock-fill me-1"></i>
-                                        Confirmar Contraseña
+                                        Confirmar Contraseña *
                                     </label>
-                                    <div class="input-group">
-                                        <input type="password" 
-                                               class="form-control" 
-                                               id="confirmPassword" 
-                                               name="confirmPassword"
-                                               placeholder="Confirma tu contraseña"
-                                               required>
-                                        <button class="btn btn-outline-secondary" 
-                                                type="button" 
-                                                onclick="togglePassword('confirmPassword', 'toggleIcon2')">
-                                            <i class="bi bi-eye" id="toggleIcon2"></i>
-                                        </button>
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Las contraseñas deben coincidir.
-                                    </div>
+                                    <input type="password" 
+                                           class="form-control" 
+                                           id="confirmPassword" 
+                                           name="confirmPassword"
+                                           placeholder="Confirma tu contraseña"
+                                           minlength="6"
+                                           required>
+                                    <small class="form-text text-muted">Debe coincidir con la contraseña</small>
                                 </div>
                             </div>
 
@@ -144,11 +121,8 @@
                                 <input type="checkbox" class="form-check-input" id="terms" required>
                                 <label class="form-check-label" for="terms">
                                     Acepto los <a href="#" class="text-octubre">términos y condiciones</a> 
-                                    y la <a href="#" class="text-octubre">política de privacidad</a>
+                                    y la <a href="#" class="text-octubre">política de privacidad</a> *
                                 </label>
-                                <div class="invalid-feedback">
-                                    Debes aceptar los términos y condiciones.
-                                </div>
                             </div>
 
                             <!-- Información sobre el rol -->
@@ -202,74 +176,5 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Scripts inline para evitar archivos JS externos -->
-    <script>
-        // Función para mostrar/ocultar contraseña
-        function togglePassword(fieldId, iconId) {
-            const passwordField = document.getElementById(fieldId);
-            const toggleIcon = document.getElementById(iconId);
-            
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.className = 'bi bi-eye-slash';
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.className = 'bi bi-eye';
-            }
-        }
-
-        // Validación personalizada para contraseñas coincidentes
-        function validatePasswords() {
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const confirmField = document.getElementById('confirmPassword');
-            
-            if (password !== confirmPassword) {
-                confirmField.setCustomValidity('Las contraseñas no coinciden');
-                return false;
-            } else {
-                confirmField.setCustomValidity('');
-                return true;
-            }
-        }
-
-        // Validación de formulario
-        (function() {
-            'use strict';
-            window.addEventListener('load', function() {
-                const forms = document.getElementsByClassName('needs-validation');
-                const validation = Array.prototype.filter.call(forms, function(form) {
-                    form.addEventListener('submit', function(event) {
-                        // Validar contraseñas
-                        const passwordsMatch = validatePasswords();
-                        
-                        if (form.checkValidity() === false || !passwordsMatch) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-
-                // Validar contraseñas en tiempo real
-                document.getElementById('confirmPassword').addEventListener('input', validatePasswords);
-                document.getElementById('password').addEventListener('input', validatePasswords);
-            }, false);
-        })();
-
-        // Auto-dismiss alerts
-        setTimeout(function() {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(function(alert) {
-                if (alert.classList.contains('alert-dismissible')) {
-                    const bsAlert = new bootstrap.Alert(alert);
-                    bsAlert.close();
-                }
-            });
-        }, 8000);
-    </script>
 </body>
 </html>

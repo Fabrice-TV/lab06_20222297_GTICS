@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo}">Administración de Intenciones - Festival de Octubre Digital</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+    <!-- Incluir navbar -->
+    <div th:replace="~{layout/base :: navbar}"></div>
+
+    <div class="container mt-5 pt-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none">Inicio</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/dashboard}" class="text-decoration-none">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Administración Intenciones</li>
+            </ol>
+        </nav>
+
+        <!-- Encabezado -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="display-6 text-octubre mb-3">
+                    <i class="bi bi-gear me-3"></i>Administración de Intenciones
+                </h1>
+                <p class="lead text-muted">
+                    Gestiona todas las intenciones registradas por los usuarios del festival.
+                </p>
+                <div class="d-flex align-items-center text-muted mb-3">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <span>Total de intenciones registradas: <strong th:text="${totalIntenciones}">0</strong></span>
+                </div>
+            </div>
+            <div class="col-md-4 text-end">
+                <div class="btn-group" role="group">
+                    <a th:href="@{/dashboard}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Volver al Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mensajes flash -->
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Resumen estadístico -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-bar-chart me-2"></i>Resumen Estadístico
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-4">
+                                <div class="border-end">
+                                    <h3 class="text-primary mb-1" th:text="${totalIntenciones}">0</h3>
+                                    <p class="text-muted mb-0">Total de Intenciones</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="border-end">
+                                    <h3 class="text-success mb-1" th:text="${#lists.size(intenciones)}">0</h3>
+                                    <p class="text-muted mb-0">Intenciones Mostradas</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <h3 class="text-info mb-1">
+                                    <span th:if="${not #lists.isEmpty(intenciones)}" 
+                                          th:text="${#temporals.format(intenciones[0].fecha, 'dd/MM/yyyy')}">Hoy</span>
+                                    <span th:if="${#lists.isEmpty(intenciones)}">-</span>
+                                </h3>
+                                <p class="text-muted mb-0">Última Intención</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de intenciones -->
+        <div class="row">
+            <div class="col-12">
+                <!-- Si hay intenciones -->
+                <div th:if="${not #lists.isEmpty(intenciones)}">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">
+                                <i class="bi bi-list me-2"></i>Todas las Intenciones
+                            </h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Usuario</th>
+                                            <th scope="col">Descripción</th>
+                                            <th scope="col">Fecha</th>
+                                            <th scope="col">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="intencion, iterStat : ${intenciones}">
+                                            <th scope="row" th:text="${iterStat.count}">1</th>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-person-circle text-primary me-2"></i>
+                                                    <div>
+                                                        <div class="fw-semibold" 
+                                                             th:text="${intencion.usuario?.nombre ?: 'Usuario'}">
+                                                            Nombre Usuario
+                                                        </div>
+                                                        <small class="text-muted" th:text="${intencion.usuario.correo}">
+                                                            usuario@email.com
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="text-wrap" style="max-width: 300px;">
+                                                    <span th:if="${#strings.length(intencion.descripcion) > 100}"
+                                                          th:text="${#strings.substring(intencion.descripcion, 0, 100) + '...'}">
+                                                        Descripción truncada...
+                                                    </span>
+                                                    <span th:if="${#strings.length(intencion.descripcion) <= 100}"
+                                                          th:text="${intencion.descripcion}">
+                                                        Descripción completa
+                                                    </span>
+                                                </div>
+                                                <!-- Mostrar descripción completa en tooltip -->
+                                                <small class="text-muted d-block mt-1">
+                                                    <i class="bi bi-info-circle me-1"></i>
+                                                    <span th:text="${#strings.length(intencion.descripcion)}">0</span> caracteres
+                                                </small>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <span th:text="${#temporals.format(intencion.fecha, 'dd/MM/yyyy')}">
+                                                        01/10/2024
+                                                    </span>
+                                                </div>
+                                                <small class="text-muted">
+                                                    <span th:text="${#temporals.format(intencion.fecha, 'HH:mm')}">
+                                                        14:30
+                                                    </span>
+                                                </small>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <!-- Botón ver detalle -->
+                                                    <button type="button" 
+                                                            class="btn btn-sm btn-outline-primary" 
+                                                            data-bs-toggle="modal" 
+                                                            th:data-bs-target="'#modal-' + ${intencion.id}">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                    
+                                                    <!-- Botón eliminar -->
+                                                    <form th:action="@{/intenciones/admin/{id}/eliminar(id=${intencion.id})}" 
+                                                          method="post" 
+                                                          class="d-inline"
+                                                          onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta intención?');">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Si no hay intenciones -->
+                <div th:if="${#lists.isEmpty(intenciones)}" class="text-center py-5">
+                    <div class="col-md-6 mx-auto">
+                        <i class="bi bi-inbox display-1 text-muted mb-3"></i>
+                        <h3 class="text-muted">No hay intenciones registradas</h3>
+                        <p class="text-muted mb-4">
+                            Aún no se han registrado intenciones en el sistema.
+                        </p>
+                        <a th:href="@{/intenciones/nueva}" class="btn btn-primary">
+                            <i class="bi bi-plus-circle me-2"></i>Registrar Primera Intención
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales para ver detalles de cada intención -->
+    <div th:each="intencion : ${intenciones}" 
+         class="modal fade" 
+         th:id="'modal-' + ${intencion.id}" 
+         tabindex="-1" 
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-heart me-2"></i>Detalle de Intención
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Usuario:</label>
+                            <p th:text="${intencion.usuario?.nombre ?: 'Usuario'}">Nombre Usuario</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Correo:</label>
+                            <p th:text="${intencion.usuario.correo}">usuario@email.com</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Fecha:</label>
+                            <p th:text="${#temporals.format(intencion.fecha, 'dd/MM/yyyy HH:mm')}">01/10/2024 14:30</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">ID de Sesión:</label>
+                            <p><code th:text="${intencion.sessionId}">session-id</code></p>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Descripción Completa:</label>
+                            <div class="border rounded p-3 bg-light">
+                                <p class="mb-0" th:text="${intencion.descripcion}">Descripción completa de la intención</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 Festival de Octubre Digital. Panel de Administración.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

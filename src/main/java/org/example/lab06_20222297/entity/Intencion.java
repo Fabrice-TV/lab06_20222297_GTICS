@@ -18,12 +18,15 @@ public class Intencion {
     private Usuario usuario;
     
     @NotBlank(message = "La descripción es obligatoria")
-    @Size(max = 255, message = "La descripción no puede exceder 255 caracteres")
+    @Size(min = 15, max = 255, message = "La descripción debe tener entre 15 y 255 caracteres")
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
     
     @Column(name = "fecha")
     private LocalDateTime fecha;
+    
+    @Column(name = "session_id", nullable = false)
+    private String sessionId;
     
     // Constructores
     public Intencion() {}
@@ -31,6 +34,13 @@ public class Intencion {
     public Intencion(Usuario usuario, String descripcion) {
         this.usuario = usuario;
         this.descripcion = descripcion;
+        this.fecha = LocalDateTime.now();
+    }
+    
+    public Intencion(Usuario usuario, String descripcion, String sessionId) {
+        this.usuario = usuario;
+        this.descripcion = descripcion;
+        this.sessionId = sessionId;
         this.fecha = LocalDateTime.now();
     }
     
@@ -72,5 +82,13 @@ public class Intencion {
     
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
+    }
+    
+    public String getSessionId() {
+        return sessionId;
+    }
+    
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 }

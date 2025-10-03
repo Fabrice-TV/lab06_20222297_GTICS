@@ -27,7 +27,7 @@ public class ServicioInicializacion implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println("🚀 Iniciando configuración de la base de datos...");
         inicializarRoles();
-        System.out.println("✅ Configuración de la base de datos completada!");
+        //.out.println("✅ Configuración de la base de datos completada!");
     }
     
     private void inicializarRoles() {

@@ -1,11 +1,16 @@
 package org.example.lab06_20222297.controller;
 
+import org.example.lab06_20222297.service.HeroeNavalService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class FestividadesController {
+
+    @Autowired
+    private HeroeNavalService heroeNavalService;
 
     @GetMapping("/festividades")
     public String mostrarFestividades(Model model) {
@@ -18,7 +23,11 @@ public class FestividadesController {
     public String mostrarCombateAngamos(Model model) {
         model.addAttribute("titulo", "Combate de Angamos");
         model.addAttribute("fecha", "8 de Octubre");
-        return "festividades/combate-angamos-simple";
+        
+        // Cargar todos los héroes navales de la base de datos
+        model.addAttribute("heroes", heroeNavalService.listarTodos());
+        
+        return "festividades/combate-angamos";
     }
     
     @GetMapping("/senor-milagros")
