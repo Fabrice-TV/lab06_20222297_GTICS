@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo}">Formulario Héroe - Festival de Octubre Digital</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+    <!-- Solo admin puede acceder -->
+    <div sec:authorize="hasRole('ADMIN')">
+        <!-- Incluir navbar -->
+        <div th:replace="~{layout/base :: navbar}"></div>
+
+        <div class="container mt-5 pt-4">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none">Inicio</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/heroes}" class="text-decoration-none">Héroes Navales</a></li>
+                    <li class="breadcrumb-item active" aria-current="page" 
+                        th:text="${esNuevo ? 'Nuevo Héroe' : 'Editar Héroe'}">Formulario</li>
+                </ol>
+            </nav>
+
+            <!-- Encabezado -->
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <h1 class="display-6 text-octubre mb-3">
+                        <i th:class="${esNuevo ? 'bi bi-plus-circle me-3' : 'bi bi-pencil me-3'}"></i>
+                        <span th:text="${titulo}">Formulario Héroe Naval</span>
+                    </h1>
+                    <p class="lead text-muted" th:if="${esNuevo}">
+                        Registra un nuevo héroe naval del Perú con su información completa.
+                    </p>
+                    <p class="lead text-muted" th:unless="${esNuevo}">
+                        Actualiza la información del héroe naval.
+                    </p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a th:href="@{/heroes}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Volver a la Lista
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mensajes de error -->
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Formulario -->
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-form me-2"></i>
+                                Información del Héroe Naval
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="${esNuevo ? '/heroes/nuevo' : '/heroes/' + heroe.id + '/editar'}" 
+                                  method="post" th:object="${heroe}" novalidate>
+                                
+                                <!-- Nombre -->
+                                <div class="mb-4">
+                                    <label for="nombre" class="form-label fw-semibold">
+                                        <i class="bi bi-person me-2"></i>Nombre Completo *
+                                    </label>
+                                    <input type="text" class="form-control" id="nombre" th:field="*{nombre}"
+                                           placeholder="Ej: Miguel María Grau Seminario"
+                                           th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid' : ''">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" 
+                                         th:errors="*{nombre}"></div>
+                                    <div class="form-text">
+                                        Ingresa el nombre completo del héroe naval.
+                                    </div>
+                                </div>
+
+                                <!-- Rango -->
+                                <div class="mb-4">
+                                    <label for="rango" class="form-label fw-semibold">
+                                        <i class="bi bi-star me-2"></i>Rango Naval
+                                    </label>
+                                    <select class="form-select" id="rango" th:field="*{rango}"
+                                            th:classappend="${#fields.hasErrors('rango')} ? 'is-invalid' : ''">
+                                        <option value="">Selecciona un rango (opcional)</option>
+                                        <option th:each="rangoOpcion : ${rangos}" 
+                                                th:value="${rangoOpcion}" 
+                                                th:text="${rangoOpcion}"
+                                                th:selected="${rangoOpcion == heroe.rango}">
+                                            Rango
+                                        </option>
+                                    </select>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('rango')}" 
+                                         th:errors="*{rango}"></div>
+                                    <div class="form-text">
+                                        Selecciona el rango naval que ostentaba el héroe (opcional para datos existentes).
+                                    </div>
+                                </div>
+
+                                <!-- Fecha de Nacimiento -->
+                                <div class="mb-4">
+                                    <label for="fechaNacimiento" class="form-label fw-semibold">
+                                        <i class="bi bi-calendar me-2"></i>Fecha de Nacimiento
+                                    </label>
+                                    <input type="date" class="form-control" id="fechaNacimiento" th:field="*{fechaNacimiento}"
+                                           th:classappend="${#fields.hasErrors('fechaNacimiento')} ? 'is-invalid' : ''">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('fechaNacimiento')}" 
+                                         th:errors="*{fechaNacimiento}"></div>
+                                    <div class="form-text">
+                                        Fecha de nacimiento del héroe naval (opcional para datos existentes).
+                                    </div>
+                                </div>
+
+                                <!-- Reseña -->
+                                <div class="mb-4">
+                                    <label for="resena" class="form-label fw-semibold">
+                                        <i class="bi bi-journal-text me-2"></i>Reseña Histórica
+                                    </label>
+                                    <textarea class="form-control" id="resena" th:field="*{resena}" rows="6"
+                                              placeholder="Describe la vida, logros y hazañas del héroe naval..."
+                                              th:classappend="${#fields.hasErrors('resena')} ? 'is-invalid' : ''"></textarea>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('resena')}" 
+                                         th:errors="*{resena}"></div>
+                                    <div class="form-text">
+                                        Relata la historia y logros más importantes del héroe (opcional para datos existentes, máximo 1000 caracteres).
+                                    </div>
+                                </div>
+
+                                <!-- Botones -->
+                                <div class="d-flex gap-3 justify-content-end">
+                                    <a th:href="@{/heroes}" class="btn btn-outline-secondary">
+                                        <i class="bi bi-x-circle me-2"></i>Cancelar
+                                    </a>
+                                    <button type="submit" class="btn btn-octubre">
+                                        <i th:class="${esNuevo ? 'bi bi-plus-circle me-2' : 'bi bi-check-circle me-2'}"></i>
+                                        <span th:text="${esNuevo ? 'Registrar Héroe' : 'Actualizar Héroe'}">Guardar</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información adicional -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="alert alert-info border-0" style="background-color: rgba(54, 162, 235, 0.1);">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-lightbulb me-2"></i>Consejos para registrar héroes
+                        </h6>
+                        <ul class="mb-0">
+                            <li>Incluye el nombre completo del héroe naval</li>
+                            <li>Selecciona el rango más alto que ostentó</li>
+                            <li>Verifica que la fecha de nacimiento sea correcta</li>
+                            <li>Escribe una reseña detallada de sus logros y hazañas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-dark text-white py-4 mt-5">
+            <div class="container text-center">
+                <p>&copy; 2024 Festival de Octubre Digital. Panel de Administración.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Acceso denegado para no-admin -->
+    <div sec:authorize="!hasRole('ADMIN')" class="container mt-5 pt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center">
+                <i class="bi bi-shield-x display-1 text-danger mb-3"></i>
+                <h2>Acceso Denegado</h2>
+                <p class="text-muted">Solo los administradores pueden acceder a esta página.</p>
+                <a th:href="@{/heroes}" class="btn btn-primary">Ver Héroes Navales</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

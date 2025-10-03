@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo}">Festival de Octubre Digital</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <!-- Incluir navbar desde el template base -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <!-- Logo y título -->
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+                <i class="bi bi-calendar-event me-2 fs-4"></i>
+                <span class="fw-bold">Festival de Octubre</span>
+            </a>
+            
+            <!-- Toggle button para móvil - -->
+            <div class="navbar-toggler-text d-lg-none">
+                <span class="text-white">☰ Menú</span>
+            </div>
+            
+            <!-- Menu items - SIEMPRE VISIBLE -->
+            <div class="navbar-nav-container" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/}">
+                            <i class="bi bi-house-door me-1"></i>Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" th:href="@{/festividades}">
+                            <i class="bi bi-star me-1"></i>Festividades
+                        </a>
+                        <ul class="dropdown-menu-css">
+                            <li><a class="dropdown-item" th:href="@{/combate-angamos}">
+                                <i class="bi bi-anchor me-2"></i>Combate de Angamos
+                            </a></li>
+                            <li><a class="dropdown-item" th:href="@{/senor-milagros}">
+                                <i class="bi bi-heart me-2"></i>Señor de los Milagros
+                            </a></li>
+                            <li><a class="dropdown-item" th:href="@{/cancion-criolla}">
+                                <i class="bi bi-music-note me-2"></i>Día de la Canción Criolla
+                            </a></li>
+                            <li><a class="dropdown-item" th:href="@{/halloween}">
+                                <i class="bi bi-mask me-2"></i>Halloween
+                            </a></li>
+                            <li><a class="dropdown-item" th:href="@{/oktoberfest}">
+                                <i class="bi bi-cup me-2"></i>Oktoberfest
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/auth/login}">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Iniciar Sesión
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/auth/registro}">
+                            <i class="bi bi-person-plus me-1"></i>Registrarse
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="bi bi-calendar-event me-3"></i>
+                        Festival de Octubre Digital
+                    </h1>
+                    <p class="lead mb-4">
+                        Celebramos nuestras tradiciones, fe y cultura en una experiencia digital única. 
+                        Desde el heroísmo naval hasta la devoción religiosa, pasando por la música criolla 
+                        y las festividades internacionales.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a th:href="@{/festividades}" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-arrow-down me-2"></i>Explorar Festividades
+                        </a>
+                        <a th:href="@{/auth/registro}" class="btn btn-light btn-lg">
+                            <i class="bi bi-person-plus me-2"></i>Únete Ahora
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Festividades Section -->
+    <section id="festividades" class="py-5">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="display-5 fw-bold text-tradicional mb-3">
+                        <i class="bi bi-stars me-3"></i>Nuestras Festividades
+                    </h2>
+                    <p class="lead text-muted">Descubre las celebraciones más importantes del mes de octubre</p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Combate de Angamos -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="festividad-card card h-100">
+                        <div class="card-img-top bg-primary d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="bi bi-anchor text-white" style="font-size: 4rem;"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-anchor me-2"></i>Combate de Angamos
+                            </h5>
+                            <p class="card-text">
+                                Honramos a nuestros héroes navales y recordamos el heroísmo de Miguel Grau 
+                                en una de las batallas más importantes de nuestra historia.
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">8 de Octubre</small>
+                                <a th:href="@{/combate-angamos}" class="btn btn-octubre">
+                                    Explorar <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Señor de los Milagros -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="festividad-card card h-100">
+                        <div class="card-img-top bg-warning d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="bi bi-heart text-white" style="font-size: 4rem;"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-heart me-2"></i>Señor de los Milagros
+                            </h5>
+                            <p class="card-text">
+                                La procesión más grande del Perú. Una manifestación de fe y devoción 
+                                que une a millones de creyentes cada octubre.
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Todo Octubre</small>
+                                <a th:href="@{/senor-milagros}" class="btn btn-tradicional">
+                                    Explorar <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Día de la Canción Criolla -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="festividad-card card h-100">
+                        <div class="card-img-top bg-success d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="bi bi-music-note text-white" style="font-size: 4rem;"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-music-note me-2"></i>Canción Criolla
+                            </h5>
+                            <p class="card-text">
+                                Celebramos nuestra rica tradición musical con valses, polkas y marineras 
+                                que forman parte del alma peruana.
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">31 de Octubre</small>
+                                <a th:href="@{/cancion-criolla}" class="btn btn-octubre">
+                                    Explorar <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Halloween -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="festividad-card card h-100">
+                        <div class="card-img-top bg-dark d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="bi bi-mask text-white" style="font-size: 4rem;"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-mask me-2"></i>Halloween
+                            </h5>
+                            <p class="card-text">
+                                La noche de brujas llega con diversión, disfraces y actividades 
+                                para toda la familia en una celebración llena de misterio.
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">31 de Octubre</small>
+                                <a th:href="@{/halloween}" class="btn btn-tradicional">
+                                    Explorar <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Oktoberfest -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="festividad-card card h-100">
+                        <div class="card-img-top bg-info d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="bi bi-cup text-white" style="font-size: 4rem;"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-cup me-2"></i>Oktoberfest
+                            </h5>
+                            <p class="card-text">
+                                La tradicional fiesta alemana de la cerveza se celebra también aquí, 
+                                con música, gastronomía y ambiente festivo.
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Todo Octubre</small>
+                                <a th:href="@{/oktoberfest}" class="btn btn-octubre">
+                                    Explorar <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Participación Comunitaria -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="festividad-card card h-100 border-2 border-warning">
+                        <div class="card-img-top bg-gradient bg-warning d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="bi bi-people text-white" style="font-size: 4rem;"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title text-warning">
+                                <i class="bi bi-people me-2"></i>¡Participa!
+                            </h5>
+                            <p class="card-text">
+                                Únete a nuestra comunidad, participa en juegos, compite sanamente 
+                                y celebra junto a nosotros todas estas hermosas tradiciones.
+                            </p>
+                            <div class="d-flex justify-content-center">
+                                <a th:href="@{/auth/registro}" class="btn btn-warning btn-lg">
+                                    <i class="bi bi-person-plus me-2"></i>Registrarse
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h3 class="fw-bold text-tradicional mb-3">
+                        <i class="bi bi-trophy me-2"></i>
+                        ¿Listo para la Aventura?
+                    </h3>
+                    <p class="lead mb-4">
+                        Regístrate ahora y forma parte de esta increíble experiencia digital. 
+                        Participa en juegos, gana premios y conecta con nuestra rica cultura.
+                    </p>
+                    <a th:href="@{/auth/registro}" class="btn btn-octubre btn-lg me-3">
+                        <i class="bi bi-person-plus me-2"></i>Crear Cuenta
+                    </a>
+                    <a th:href="@{/auth/login}" class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="bi bi-calendar-event me-2"></i>Festival de Octubre Digital</h5>
+                    <p class="mb-0">Celebrando nuestras tradiciones en el mundo digital</p>
+                    <small class="text-muted">Municipalidad de San Martín</small>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="d-flex justify-content-md-end justify-content-start">
+                        <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-youtube"></i></a>
+                    </div>
+                    <small class="text-muted mt-2 d-block">© 2024 Todos los derechos reservados</small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

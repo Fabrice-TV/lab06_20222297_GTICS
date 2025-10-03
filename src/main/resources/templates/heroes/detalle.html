@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo}">Detalle Héroe - Festival de Octubre Digital</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+    <!-- Incluir navbar -->
+    <div th:replace="~{layout/base :: navbar}"></div>
+
+    <div class="container mt-5 pt-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none">Inicio</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/heroes}" class="text-decoration-none">Héroes Navales</a></li>
+                <li class="breadcrumb-item active" aria-current="page" th:text="${heroe.nombre}">Héroe</li>
+            </ol>
+        </nav>
+
+        <!-- Encabezado con acciones -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="badge bg-primary me-3 p-2" style="font-size: 1rem;">
+                        <i class="bi bi-star me-1"></i>
+                        <span th:text="${heroe.rango}">Almirante</span>
+                    </div>
+                    <h1 class="display-6 text-octubre mb-0" th:text="${heroe.nombre}">Miguel Grau</h1>
+                </div>
+            </div>
+            <div class="col-md-4 text-end">
+                <div class="btn-group" role="group">
+                    <a th:href="@{/heroes}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Volver
+                    </a>
+                    <!-- Botones de admin -->
+                    <div sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/heroes/{id}/editar(id=${heroe.id})}" class="btn btn-outline-october">
+                            <i class="bi bi-pencil me-2"></i>Editar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="row">
+            <!-- Información principal -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-person-badge me-2"></i>
+                            Información Personal
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <!-- Nombre -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-muted">Nombre Completo</label>
+                                <p class="fs-5 mb-0" th:text="${heroe.nombre}">Miguel Grau</p>
+                            </div>
+                            
+                            <!-- Rango -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-muted">Rango Naval</label>
+                                <p class="fs-5 mb-0">
+                                    <span class="badge bg-primary p-2" th:text="${heroe.rango}">Almirante</span>
+                                </p>
+                            </div>
+                            
+                            <!-- Fecha de nacimiento -->
+                            <div class="col-md-6" th:if="${heroe.fechaNacimiento}">
+                                <label class="form-label fw-semibold text-muted">Fecha de Nacimiento</label>
+                                <p class="fs-5 mb-0">
+                                    <i class="bi bi-calendar me-2 text-octubre"></i>
+                                    <span th:text="${#temporals.format(heroe.fechaNacimiento, 'dd \'de\' MMMM \'de\' yyyy', #locale)}">
+                                        27 de julio de 1834
+                                    </span>
+                                </p>
+                            </div>
+                            
+                            <!-- Fecha de registro -->
+                            <div class="col-md-6" th:if="${heroe.fechaCreacion}">
+                                <label class="form-label fw-semibold text-muted">Registrado el</label>
+                                <p class="fs-6 mb-0 text-muted">
+                                    <i class="bi bi-clock me-2"></i>
+                                    <span th:text="${#temporals.format(heroe.fechaCreacion, 'dd/MM/yyyy')}">01/10/2024</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reseña histórica -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-journal-text me-2"></i>
+                            Reseña Histórica
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="fs-6 lh-lg" style="text-align: justify;" th:text="${heroe.resena}">
+                            Reseña del héroe naval describiendo sus logros, hazañas y contribución a la historia naval del Perú.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar con información adicional -->
+            <div class="col-lg-4">
+                <!-- Tarjeta de acciones rápidas para admin -->
+                <div class="card shadow-sm mb-4" sec:authorize="hasRole('ADMIN')">
+                    <div class="card-header bg-warning text-dark">
+                        <h6 class="card-title mb-0">
+                            <i class="bi bi-tools me-2"></i>Acciones de Administrador
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a th:href="@{/heroes/{id}/editar(id=${heroe.id})}" class="btn btn-outline-primary">
+                                <i class="bi bi-pencil me-2"></i>Editar Información
+                            </a>
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#eliminarModal">
+                                <i class="bi bi-trash me-2"></i>Eliminar Héroe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información adicional -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="card-title mb-0">
+                            <i class="bi bi-info-circle me-2"></i>Sobre los Héroes Navales
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            Los héroes navales del Perú defendieron nuestras costas y mares con valentía y honor, 
+                            especialmente durante el Combate de Angamos.
+                        </p>
+                        <a th:href="@{/combate-angamos}" class="btn btn-sm btn-outline-info">
+                            <i class="bi bi-anchor me-2"></i>Ver Combate de Angamos
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Navegación entre héroes -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-secondary text-white">
+                        <h6 class="card-title mb-0">
+                            <i class="bi bi-arrow-left-right me-2"></i>Explorar Más Héroes
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a th:href="@{/heroes}" class="btn btn-outline-secondary">
+                                <i class="bi bi-list me-2"></i>Ver Todos los Héroes
+                            </a>
+                            <a th:href="@{/heroes/nuevo}" class="btn btn-outline-october" sec:authorize="hasRole('ADMIN')">
+                                <i class="bi bi-plus-circle me-2"></i>Registrar Nuevo Héroe
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mensaje para visitantes -->
+        <div class="row mt-4" sec:authorize="!isAuthenticated()">
+            <div class="col-12">
+                <div class="alert alert-primary border-0" style="background-color: rgba(54, 162, 235, 0.1);">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-person-plus-fill text-primary me-3" style="font-size: 1.5rem;"></i>
+                        <div>
+                            <h6 class="alert-heading mb-2">¡Únete al Festival de Octubre Digital!</h6>
+                            <p class="mb-2">Regístrate para acceder a más contenido sobre nuestros héroes navales y participar en actividades exclusivas.</p>
+                            <a th:href="@{/auth/registro}" class="btn btn-primary btn-sm">
+                                <i class="bi bi-person-plus me-2"></i>Registrarse Gratis
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación para eliminar (Solo Admin) -->
+    <div class="modal fade" id="eliminarModal" tabindex="-1" sec:authorize="hasRole('ADMIN')">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Confirmar Eliminación
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas eliminar al héroe naval <strong th:text="${heroe.nombre}">Nombre del Héroe</strong>?</p>
+                    <p class="text-danger"><strong>Esta acción no se puede deshacer.</strong></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form th:action="@{/heroes/{id}/eliminar(id=${heroe.id})}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash me-2"></i>Eliminar Definitivamente
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 Festival de Octubre Digital. Honrando a nuestros héroes navales.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

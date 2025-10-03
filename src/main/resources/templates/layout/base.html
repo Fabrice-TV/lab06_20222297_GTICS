@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo ?: 'Festival de Octubre Digital'}">Festival de Octubre Digital</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    
+    <th:block th:fragment="extra-css"></th:block>
+</head>
+<body>
+    <!-- Header con Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm" th:fragment="navbar">
+        <div class="container">
+            <!-- Logo y título -->
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+                <i class="bi bi-calendar-event me-2 fs-4"></i>
+                <span class="fw-bold">Festival de Octubre</span>
+            </a>
+            
+            <!-- Toggle button para móvil - CONVERTIDO A FUNCIONAL SIN JS -->
+            <!-- Como no usamos JS, este menú será visible siempre en escritorio y se puede expandir en móvil con CSS puro -->
+            
+            <!-- Menu items - SIEMPRE VISIBLE -->
+            <div class="navbar-nav-container" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <!-- Inicio -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}" th:classappend="${#request.requestURI == '/' ? 'active' : ''}">
+                            <i class="bi bi-house-door me-1"></i>Inicio
+                        </a>
+                    </li>
+                    
+                    <!-- Festividades (visible para todos) -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" th:href="@{/festividades}">
+                            <i class="bi bi-star me-1"></i>Festividades
+                        </a>
+                        <!-- Dropdown simple con CSS hover -->
+                        <ul class="dropdown-menu-css">
+                            <li><a class="dropdown-item" th:href="@{/heroes}">
+                                <i class="bi bi-person-badge me-2"></i>Héroes Navales
+                            </a></li>
+                            <li><a class="dropdown-item" th:href="@{/combate-angamos}">
+                                <i class="bi bi-anchor me-2"></i>Combate de Angamos
+                            </a></li>
+                            <li><a class="dropdown-item" th:href="@{/senor-milagros}">
+                                <i class="bi bi-heart me-2"></i>Señor de los Milagros
+                            </a></li>
+                            <li><a class="dropdown-item" th:href="@{/cancion-criolla}">
+                                <i class="bi bi-music-note me-2"></i>Día de la Canción Criolla
+                            </a></li>
+                            <li><a class="dropdown-item" th:href="@{/halloween}">
+                                <i class="bi bi-mask me-2"></i>Halloween
+                            </a></li>
+                            <li><a class="dropdown-item" th:href="@{/oktoberfest}">
+                                <i class="bi bi-cup me-2"></i>Oktoberfest
+                            </a></li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Juegos (solo usuarios autenticados) -->
+                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                        <a class="nav-link dropdown-toggle" th:href="@{/juegos}">
+                            <i class="bi bi-controller me-1"></i>Juegos
+                        </a>
+                        <ul class="dropdown-menu-css">
+                            <li><a class="dropdown-item" th:href="@{/juegos/adivina-cancion}">
+                                <i class="bi bi-music-note-beamed me-2"></i>Adivina la Canción
+                            </a></li>
+                            <li><a class="dropdown-item" th:href="@{/juegos/numero-casa}">
+                                <i class="bi bi-house me-2"></i>Número de Casa
+                            </a></li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Admin Panel (solo administradores) -->
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link dropdown-toggle" href="#admin">
+                            <i class="bi bi-gear me-1"></i>Administración
+                        </a>
+                        <ul class="dropdown-menu-css">
+                            <li><a class="dropdown-item" th:href="@{/admin/usuarios}">
+                                <i class="bi bi-people me-2"></i>Gestionar Usuarios
+                            </a></li>
+                            <li><a class="dropdown-item" th:href="@{/admin/eventos}">
+                                <i class="bi bi-calendar-check me-2"></i>Gestionar Eventos
+                            </a></li>
+                            <li><a class="dropdown-item" th:href="@{/admin/reportes}">
+                                <i class="bi bi-bar-chart me-2"></i>Reportes
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <!-- User actions -->
+                <ul class="navbar-nav">
+                    <!-- Usuario no autenticado -->
+                    <div sec:authorize="!isAuthenticated()">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/login}">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>Iniciar Sesión
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/registro}">
+                                <i class="bi bi-person-plus me-1"></i>Registrarse
+                            </a>
+                        </li>
+                    </div>
+                    
+                    <!-- Usuario autenticado -->
+                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#usuario">
+                            <i class="bi bi-person-circle me-2"></i>
+                            <span sec:authentication="name">Usuario</span>
+                        </a>
+                        <ul class="dropdown-menu-css dropdown-menu-end">
+                            <li><a class="dropdown-item" th:href="@{/perfil}">
+                                <i class="bi bi-person me-2"></i>Mi Perfil
+                            </a></li>
+                            <li><a class="dropdown-item" th:href="@{/mis-actividades}">
+                                <i class="bi bi-activity me-2"></i>Mis Actividades
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" class="d-inline">
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Contenido principal -->
+    <main th:fragment="content">
+        <!-- El contenido se insertará aquí -->
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="bi bi-calendar-event me-2"></i>Festival de Octubre Digital</h5>
+                    <p class="mb-0">Celebrando nuestras tradiciones en el mundo digital</p>
+                    <small class="text-muted">Municipalidad de San Martín</small>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="d-flex justify-content-md-end justify-content-start">
+                        <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-youtube"></i></a>
+                    </div>
+                    <small class="text-muted mt-2 d-block">© 2024 Todos los derechos reservados</small>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+
+    
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combate de Angamos - Festival de Octubre Digital</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+    <!-- Incluir navbar -->
+    <div th:replace="layout/base :: navbar"></div>
+
+    <div class="container mt-5 pt-4">
+        <!-- Hero Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="text-center p-5 rounded" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white;">
+                    <i class="bi bi-anchor display-1 mb-3"></i>
+                    <h1 class="display-4 mb-3">Combate de Angamos</h1>
+                    <p class="lead">8 de Octubre de 1879 - Un día que marcó la historia naval del Perú</p>
+                    <p class="fs-5">"El que no tiene de Congo, tiene de Carabalí"</p>
+                    <small class="text-light">- Frase célebre del Almirante Miguel Grau</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navegación rápida -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="#historia" class="btn btn-outline-primary">
+                        <i class="bi bi-book me-2"></i>Historia
+                    </a>
+                    <a href="#heroes" class="btn btn-outline-primary">
+                        <i class="bi bi-person-badge me-2"></i>Héroes
+                    </a>
+                    <a href="#legado" class="btn btn-outline-primary">
+                        <i class="bi bi-trophy me-2"></i>Legado
+                    </a>
+                    <a th:href="@{/heroes}" class="btn btn-octubre">
+                        <i class="bi bi-eye me-2"></i>Ver Héroes Navales
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Historia del Combate -->
+        <div id="historia" class="row mb-5">
+            <div class="col-12">
+                <h2 class="display-6 text-octubre mb-4">
+                    <i class="bi bi-clock-history me-3"></i>Historia del Combate
+                </h2>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <p class="lead">
+                                    El 8 de octubre de 1879, en las aguas de Angamos, se libró uno de los combates navales 
+                                    más importantes de la historia del Perú durante la Guerra del Pacífico.
+                                </p>
+                                <p>
+                                    El monitor <strong>Huáscar</strong>, comandado por el Almirante Miguel Grau Seminario, 
+                                    fue interceptado por la escuadra chilena compuesta por los blindados 
+                                    <em>Cochrane</em> y <em>Blanco Encalada</em>.
+                                </p>
+                                <p>
+                                    Durante el combate, que duró aproximadamente una hora, el Almirante Grau demostró 
+                                    una vez más su valor y pericia naval, pero una granada enemiga impactó en la torre 
+                                    de comando del Huáscar, causando su muerte y la de algunos de sus oficiales.
+                                </p>
+                                <p>
+                                    La pérdida del "Caballero de los Mares" fue un duro golpe para la marina peruana, 
+                                    pero su sacrificio y el de sus hombres quedó grabado para siempre en la memoria nacional.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-primary text-white">
+                                <h6 class="mb-0">Datos del Combate</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <strong>Fecha:</strong><br>
+                                    8 de Octubre de 1879
+                                </div>
+                                <div class="mb-3">
+                                    <strong>Lugar:</strong><br>
+                                    Punta Angamos, Chile
+                                </div>
+                                <div class="mb-3">
+                                    <strong>Buque Peruano:</strong><br>
+                                    Monitor Huáscar
+                                </div>
+                                <div class="mb-3">
+                                    <strong>Comandante:</strong><br>
+                                    Almirante Miguel Grau
+                                </div>
+                                <div>
+                                    <strong>Resultado:</strong><br>
+                                    Captura del Huáscar
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Héroes -->
+        <div id="heroes" class="row mb-5">
+            <div class="col-12">
+                <h2 class="display-6 text-octubre mb-4">
+                    <i class="bi bi-person-badge me-3"></i>Héroes del Combate
+                </h2>
+                <div class="row g-4">
+                    <!-- Miguel Grau -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 shadow-sm festival-card">
+                            <div class="card-header bg-success text-white text-center">
+                                <i class="bi bi-star display-4"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title text-octubre">Almirante Miguel Grau</h5>
+                                <p class="card-text">
+                                    "El Caballero de los Mares", comandante del Huáscar. Su nobleza y valor 
+                                    en combate lo convirtieron en el héroe naval más admirado del Perú.
+                                </p>
+                                <p class="text-muted">
+                                    <strong>Rango:</strong> Almirante<br>
+                                    <strong>Buque:</strong> Monitor Huáscar
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Elías Aguirre -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 shadow-sm festival-card">
+                            <div class="card-header bg-primary text-white text-center">
+                                <i class="bi bi-shield display-4"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title text-octubre">Teniente Elías Aguirre</h5>
+                                <p class="card-text">
+                                    Segundo comandante del Huáscar, asumió el mando tras la muerte de Grau. 
+                                    Continuó la lucha hasta su último aliento.
+                                </p>
+                                <p class="text-muted">
+                                    <strong>Rango:</strong> Teniente Primero<br>
+                                    <strong>Edad:</strong> 25 años
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pedro Garezon -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 shadow-sm festival-card">
+                            <div class="card-header bg-warning text-dark text-center">
+                                <i class="bi bi-gear display-4"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title text-octubre">Teniente Pedro Garezon</h5>
+                                <p class="card-text">
+                                    Tercer comandante que asumió el mando tras la muerte de Aguirre. 
+                                    Luchó valientemente hasta el final del combate.
+                                </p>
+                                <p class="text-muted">
+                                    <strong>Rango:</strong> Teniente Segundo<br>
+                                    <strong>Posición:</strong> Timonel
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enlace a todos los héroes -->
+                <div class="text-center mt-4">
+                    <a th:href="@{/heroes}" class="btn btn-octubre btn-lg">
+                        <i class="bi bi-eye me-2"></i>Ver Todos los Héroes Navales
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legado -->
+        <div id="legado" class="row mb-5">
+            <div class="col-12">
+                <h2 class="display-6 text-octubre mb-4">
+                    <i class="bi bi-trophy me-3"></i>Legado y Significado
+                </h2>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-header bg-info text-white">
+                                <h6 class="mb-0">Impacto Histórico</h6>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <i class="bi bi-check-circle text-success me-2"></i>
+                                        Marcó el fin de la campaña naval peruana
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-check-circle text-success me-2"></i>
+                                        Consolidó la figura de Miguel Grau como héroe nacional
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-check-circle text-success me-2"></i>
+                                        Inspiró valores de honor y sacrificio patrio
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-check-circle text-success me-2"></i>
+                                        Se convirtió en símbolo de la resistencia peruana
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-header bg-success text-white">
+                                <h6 class="mb-0">Conmemoración Actual</h6>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <i class="bi bi-calendar text-primary me-2"></i>
+                                        8 de octubre: Día de los Héroes de Angamos
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-building text-primary me-2"></i>
+                                        Monumentos en Lima, Callao y Piura
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-book text-primary me-2"></i>
+                                        Estudios obligatorios en colegios
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-ship text-primary me-2"></i>
+                                        Museo Naval del Callao
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-sm border-0" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);">
+                    <div class="card-body text-white text-center py-5">
+                        <h3 class="mb-3">Honra a Nuestros Héroes</h3>
+                        <p class="lead mb-4">
+                            Conoce más sobre los valientes marinos que defendieron nuestro mar territorial
+                        </p>
+                        <div class="d-flex gap-3 justify-content-center flex-wrap">
+                            <a th:href="@{/heroes}" class="btn btn-light btn-lg">
+                                <i class="bi bi-person-badge me-2"></i>Ver Héroes Navales
+                            </a>
+                            <a th:href="@{/festividades}" class="btn btn-outline-light btn-lg">
+                                <i class="bi bi-star me-2"></i>Otras Festividades
+                            </a>
+                            <a th:href="@{/registro}" class="btn btn-light btn-lg" sec:authorize="!isAuthenticated()">
+                                <i class="bi bi-person-plus me-2"></i>Únete al Festival
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 Festival de Octubre Digital. Recordando a los Héroes de Angamos.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

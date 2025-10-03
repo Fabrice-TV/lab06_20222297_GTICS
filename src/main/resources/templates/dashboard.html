@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo}">Dashboard - Festival de Octubre</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+                <i class="bi bi-calendar-event me-2 fs-4"></i>
+                <span class="fw-bold">Festival de Octubre</span>
+            </a>
+            
+            <div class="navbar-nav-container">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">
+                            <i class="bi bi-house-door me-1"></i>Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/dashboard}">
+                            <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#usuario">
+                            <i class="bi bi-person-circle me-2"></i>
+                            <span sec:authentication="name">Usuario</span>
+                        </a>
+                        <ul class="dropdown-menu-css dropdown-menu-end">
+                            <li><a class="dropdown-item" th:href="@{/perfil}">
+                                <i class="bi bi-person me-2"></i>Mi Perfil
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" class="d-inline">
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-primary text-white py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="h3 mb-1">
+                        <i class="bi bi-emoji-smile me-2"></i>
+                        ¡Bienvenido al Festival!
+                    </h1>
+                    <p class="mb-0 opacity-75" sec:authorize="isAuthenticated()">
+                        Hola, <span sec:authentication="name" class="fw-semibold"></span>. 
+                        Estás listo para disfrutar de todas nuestras actividades.
+                    </p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <div class="badge bg-warning text-dark fs-6">
+                        <i class="bi bi-calendar3 me-1"></i>
+                        Octubre 2024
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contenido principal -->
+    <div class="container my-5">
+        <!-- Resumen de actividades -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2 class="text-tradicional mb-4">
+                    <i class="bi bi-graph-up me-2"></i>
+                    Tu Resumen de Actividades
+                </h2>
+            </div>
+            
+            <!-- Estadísticas -->
+            <div class="col-md-3 mb-3">
+                <div class="card text-center border-primary">
+                    <div class="card-body">
+                        <i class="bi bi-trophy-fill text-warning fs-1 mb-2"></i>
+                        <h4 class="card-title text-primary">0</h4>
+                        <p class="card-text text-muted">Logros Obtenidos</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card text-center border-success">
+                    <div class="card-body">
+                        <i class="bi bi-controller text-success fs-1 mb-2"></i>
+                        <h4 class="card-title text-success">0</h4>
+                        <p class="card-text text-muted">Juegos Jugados</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card text-center border-info">
+                    <div class="card-body">
+                        <i class="bi bi-star-fill text-info fs-1 mb-2"></i>
+                        <h4 class="card-title text-info">0</h4>
+                        <p class="card-text text-muted">Puntos Totales</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card text-center border-orange">
+                    <div class="card-body">
+                        <i class="bi bi-people-fill text-octubre fs-1 mb-2"></i>
+                        <h4 class="card-title text-octubre">1</h4>
+                        <p class="card-text text-muted">Participaciones</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actividades disponibles -->
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-tradicional mb-4">
+                    <i class="bi bi-lightning-charge me-2"></i>
+                    Actividades Disponibles
+                </h2>
+            </div>
+            
+            <!-- Festividades -->
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-star me-2"></i>
+                            Festividades del Mes
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            <a th:href="@{/combate-angamos}" class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-anchor text-primary me-2"></i>
+                                        <strong>Combate de Angamos</strong>
+                                        <small class="d-block text-muted">Héroes navales del Perú</small>
+                                    </div>
+                                    <span class="badge bg-primary">8 Oct</span>
+                                </div>
+                            </a>
+                            
+                            <a th:href="@{/senor-milagros}" class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-heart text-warning me-2"></i>
+                                        <strong>Señor de los Milagros</strong>
+                                        <small class="d-block text-muted">Fe y devoción</small>
+                                    </div>
+                                    <span class="badge bg-warning">Todo Oct</span>
+                                </div>
+                            </a>
+                            
+                            <a th:href="@{/cancion-criolla}" class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-music-note text-success me-2"></i>
+                                        <strong>Canción Criolla</strong>
+                                        <small class="d-block text-muted">Música peruana</small>
+                                    </div>
+                                    <span class="badge bg-success">31 Oct</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Haz clic para participar en cada festividad
+                        </small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Juegos -->
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-controller me-2"></i>
+                            Juegos Interactivos
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-music-note-beamed text-success me-2"></i>
+                                        <strong>Adivina la Canción</strong>
+                                        <small class="d-block text-muted">Demuestra tu conocimiento musical</small>
+                                    </div>
+                                    <span class="badge bg-secondary">Próximamente</span>
+                                </div>
+                            </a>
+                            
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-house text-info me-2"></i>
+                                        <strong>Número de Casa</strong>
+                                        <small class="d-block text-muted">Juego de adivinanza numérica</small>
+                                    </div>
+                                    <span class="badge bg-secondary">Próximamente</span>
+                                </div>
+                            </a>
+                            
+                            <a th:href="@{/oktoberfest}" class="list-group-item list-group-item-action">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-cup text-warning me-2"></i>
+                                        <strong>Reserva tu Mesa</strong>
+                                        <small class="d-block text-muted">Oktoberfest 2024</small>
+                                    </div>
+                                    <span class="badge bg-warning">Disponible</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">
+                            <i class="bi bi-trophy me-1"></i>
+                            Gana puntos y sube en el ranking
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card bg-light">
+                    <div class="card-body text-center py-4">
+                        <h3 class="text-tradicional mb-3">
+                            <i class="bi bi-gift me-2"></i>
+                            ¡Comienza tu Aventura!
+                        </h3>
+                        <p class="lead mb-4">
+                            Explora todas las festividades, participa en juegos y conecta con nuestra rica cultura peruana.
+                        </p>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a th:href="@{/combate-angamos}" class="btn btn-octubre btn-lg">
+                                <i class="bi bi-anchor me-2"></i>Explorar Festividades
+                            </a>
+                            <a href="#" class="btn btn-outline-success btn-lg">
+                                <i class="bi bi-controller me-2"></i>Jugar Ahora
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="bi bi-calendar-event me-2"></i>Festival de Octubre Digital</h5>
+                    <p class="mb-0">Celebrando nuestras tradiciones en el mundo digital</p>
+                    <small class="text-muted">Municipalidad de San Martín</small>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <small class="text-muted">© 2024 Todos los derechos reservados</small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
