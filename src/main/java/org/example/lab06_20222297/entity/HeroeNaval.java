@@ -61,7 +61,7 @@ public class HeroeNaval {
         this.resena = resena;
     }
     
-    // Constructor con parámetros legacy (compatibilidad)
+
     public HeroeNaval(String nombre, String descripcion, String pais) {
         this();
         this.nombre = nombre;
@@ -118,7 +118,7 @@ public class HeroeNaval {
         this.fechaCreacion = fechaCreacion;
     }
     
-    // Legacy getters y setters
+
     public String getDescripcion() {
         return descripcion;
     }
