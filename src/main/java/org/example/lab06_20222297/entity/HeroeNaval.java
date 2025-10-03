@@ -38,7 +38,7 @@ public class HeroeNaval {
     @Column(name = "fecha_creacion")
     private LocalDate fechaCreacion;
     
-    // Legacy fields - mantener para compatibilidad con base de datos existente
+
     @Size(max = 255, message = "La descripción no puede exceder 255 caracteres")
     @Column(name = "descripcion")
     private String descripcion;
