@@ -1,0 +1,21 @@
+package org.example.lab06_20222297.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class HomeController {
+    
+    @GetMapping("/")
+    public String home(Model model) {
+        model.addAttribute("titulo", "Festival de Octubre Digital - Inicio");
+        return "index";
+    }
+    
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        model.addAttribute("titulo", "Dashboard - Festival de Octubre");
+        return "dashboard";
+    }
+}
