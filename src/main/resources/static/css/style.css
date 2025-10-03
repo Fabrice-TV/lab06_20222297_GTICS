@@ -1,0 +1,548 @@
+/* ===================================
+   ESTILOS PERSONALIZADOS
+   Festival de Octubre Digital
+   =================================== */
+
+/* Variables de colores temáticos */
+:root {
+    --color-octubre: #ff6b35;
+    --color-tradicional: #8b4513;
+    --color-festividad: #ffd700;
+    --color-secundario: #6c757d;
+    --color-exito: #28a745;
+    --color-peligro: #dc3545;
+}
+
+/* Body y elementos generales */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Navbar personalizada  */
+.navbar-brand {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.navbar-nav-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-radius: 6px;
+    margin: 0 2px;
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+}
+
+.navbar-nav .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+}
+
+/* Dropdown menus - solo con CSS hover */
+.nav-item.dropdown {
+    position: relative;
+}
+
+.dropdown-menu-css {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    min-width: 200px;
+    padding: 0.5rem 0;
+    margin: 0;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    list-style: none;
+}
+
+.nav-item.dropdown:hover .dropdown-menu-css {
+    display: block;
+}
+
+.dropdown-menu-css .dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    margin: 2px 4px;
+}
+
+.dropdown-menu-css .dropdown-item:hover {
+    background-color: var(--color-octubre);
+    color: white;
+    transform: translateX(3px);
+}
+
+/* Ajustes responsive  */
+@media (max-width: 768px) {
+    .navbar-nav-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .navbar-nav {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .nav-item.dropdown .dropdown-menu-css {
+        position: static;
+        display: none;
+        box-shadow: none;
+        border: none;
+        background-color: rgba(255, 255, 255, 0.1);
+        margin-top: 0.5rem;
+    }
+    
+    .nav-item.dropdown:hover .dropdown-menu-css {
+        display: block;
+    }
+    
+    .navbar-toggler-text {
+        display: block !important;
+        padding: 0.5rem;
+        color: white;
+        cursor: pointer;
+    }
+    
+    /* En móvil, mostrar menús siempre visibles para mejor accesibilidad */
+    .navbar-nav-container {
+        display: flex !important;
+    }
+}
+
+/* Asegurar que todo sea accesible  */
+.nav-item.dropdown:focus-within .dropdown-menu-css {
+    display: block;
+}
+
+/* Scroll suave */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Cards y contenedores */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--color-octubre), #ff8c42);
+    color: white;
+    border-radius: 12px 12px 0 0 !important;
+    font-weight: 600;
+}
+
+/* Botones temáticos */
+.btn-octubre {
+    background: linear-gradient(135deg, var(--color-octubre), #ff8c42);
+    border: none;
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-octubre:hover {
+    background: linear-gradient(135deg, #e55a2b, #ff6b35);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+}
+
+.btn-outline-octubre {
+    border: 2px solid var(--color-octubre);
+    color: var(--color-octubre);
+    background: transparent;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-octubre:hover {
+    background: var(--color-octubre);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-tradicional {
+    background: linear-gradient(135deg, var(--color-tradicional), #a0522d);
+    border: none;
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-tradicional:hover {
+    background: linear-gradient(135deg, #7a3f0e, #8b4513);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.4);
+}
+
+.btn-outline-tradicional {
+    border: 2px solid var(--color-tradicional);
+    color: var(--color-tradicional);
+    background: transparent;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-tradicional:hover {
+    background: var(--color-tradicional);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Hero sections */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-section p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* Festividades cards */
+.festividad-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.festividad-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.festividad-card .card-img-top {
+    height: 200px;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.festividad-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.festividad-card .card-body {
+    padding: 1.5rem;
+}
+
+.festividad-card .card-title {
+    color: var(--color-tradicional);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+/* Badges y etiquetas */
+.badge-octubre {
+    background-color: var(--color-octubre);
+    color: white;
+}
+
+.badge-tradicional {
+    background-color: var(--color-tradicional);
+    color: white;
+}
+
+.badge-festividad {
+    background-color: var(--color-festividad);
+    color: #333;
+}
+
+/* Formularios */
+.form-control:focus {
+    border-color: var(--color-octubre);
+    box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--color-tradicional);
+}
+
+/* Alertas personalizadas */
+.alert-octubre {
+    background-color: rgba(255, 107, 53, 0.1);
+    border-color: var(--color-octubre);
+    color: #c44419;
+}
+
+/* Animaciones simples con CSS puro */
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Aplicar animación automáticamente a las cards */
+.card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-section p {
+        font-size: 1rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+}
+
+/* Footer */
+footer {
+    background: linear-gradient(135deg, #2c3e50, #34495e) !important;
+}
+
+footer a {
+    transition: all 0.3s ease;
+}
+
+footer a:hover {
+    color: var(--color-octubre) !important;
+    transform: scale(1.2);
+}
+
+/* Spinner de carga simple con CSS puro */
+.spinner-octubre {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--color-octubre);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Utilidades personalizadas */
+.text-octubre {
+    color: var(--color-octubre) !important;
+}
+
+.text-tradicional {
+    color: var(--color-tradicional) !important;
+}
+
+.bg-octubre {
+    background-color: var(--color-octubre) !important;
+}
+
+.bg-tradicional {
+    background-color: var(--color-tradicional) !important;
+}
+
+.border-orange {
+    border-color: var(--color-octubre) !important;
+}
+
+/* Iconos con efectos hover simples */
+.icon-animated {
+    transition: all 0.3s ease;
+}
+
+.icon-animated:hover {
+    transform: scale(1.2);
+    color: var(--color-octubre);
+}
+
+/* Estilos para formularios de autenticación */
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.form-control:focus {
+    border-color: var(--color-octubre);
+    box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
+}
+
+.form-check-input:checked {
+    background-color: var(--color-octubre);
+    border-color: var(--color-octubre);
+}
+
+/* Alertas personalizadas para autenticación */
+.alert-octubre {
+    background-color: rgba(255, 107, 53, 0.1);
+    border-color: var(--color-octubre);
+    color: #c44419;
+}
+
+/* Validación de formularios */
+.was-validated .form-control:valid {
+    border-color: var(--color-exito);
+}
+
+.was-validated .form-control:invalid {
+    border-color: var(--color-peligro);
+}
+
+/* Estilos para las tarjetas de héroes navales */
+.heroe-card {
+    transition: all 0.3s ease;
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.heroe-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.2) !important;
+}
+
+.heroe-card .card-header {
+    border: none;
+    position: relative;
+}
+
+.heroe-card .card-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+/* Animación para el dropdown de acciones */
+.heroe-card .dropdown-toggle {
+    transition: all 0.2s ease;
+}
+
+.heroe-card .dropdown-toggle:hover {
+    transform: rotate(90deg);
+}
+
+/* Estilo para la reseña en las cards */
+.heroe-card .card-text {
+    line-height: 1.6;
+    color: #6c757d;
+}
+
+/* Efecto hover en botones de héroes */
+.heroe-card .btn-outline-october:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+/* Estilo para badges de rango */
+.heroe-card .badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+}
+
+/* Responsividad mejorada para tarjetas de héroes */
+@media (max-width: 768px) {
+    .heroe-card {
+        margin-bottom: 1rem;
+    }
+    
+    .heroe-card .card-header {
+        padding: 1rem;
+    }
+    
+    .heroe-card .display-1 {
+        font-size: 3rem;
+    }
+}
+
+/* Botones de festividades */
+.btn-outline-october {
+    color: var(--color-octubre);
+    border-color: var(--color-octubre);
+    transition: all 0.3s ease;
+}
+
+.btn-outline-october:hover {
+    background-color: var(--color-octubre);
+    border-color: var(--color-octubre);
+    color: white;
+    transform: translateX(3px);
+}
+
+.btn-octubre {
+    background-color: var(--color-octubre);
+    border-color: var(--color-octubre);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-octubre:hover {
+    background-color: #e85a2b;
+    border-color: #e85a2b;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
