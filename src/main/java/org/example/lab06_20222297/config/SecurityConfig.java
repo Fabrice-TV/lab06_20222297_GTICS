@@ -30,15 +30,20 @@ public class SecurityConfig {
                 .requestMatchers("/", "/auth/login", "/registro").permitAll()
                 // Festividades: solo índice y combate-angamos son públicos
                 .requestMatchers("/festividades", "/combate-angamos").permitAll()
+                // Sistema de reservas Oktoberfest para usuarios autenticados (DEBE IR ANTES de /admin/**)
+                .requestMatchers("/oktoberfest/reservas", "/oktoberfest/reservas/**").hasAnyRole("USUARIO", "ADMIN")
                 // Festividades que requieren autenticación
                 .requestMatchers("/senor-milagros", "/cancion-criolla", "/halloween", "/oktoberfest").authenticated()
+                // Administración requiere ADMIN (rutas específicas primero)
+                .requestMatchers("/admin/juego/**").hasRole("ADMIN")  // Solo ADMIN puede administrar el juego
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 // Héroes: TODA la gestión de héroes es SOLO para ADMIN
                 .requestMatchers("/heroes/**").hasRole("ADMIN")  // Solo ADMIN puede ver y gestionar héroes
                 // Intenciones: usuarios autenticados pueden crear, ADMIN puede administrar
                 .requestMatchers("/intenciones/admin/**").hasRole("ADMIN")  // Solo ADMIN puede administrar intenciones
                 .requestMatchers("/intenciones/**").hasAnyRole("USUARIO", "ADMIN")  // Usuarios autenticados pueden crear intenciones
-                // Administración requiere ADMIN
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                // Juego de Canción Criolla
+                .requestMatchers("/juego/**").hasAnyRole("USUARIO", "ADMIN")  // Usuarios autenticados pueden jugar
                 // Usuario y juegos requieren autenticación
                 .requestMatchers("/usuario/**", "/juegos/**", "/dashboard").hasAnyRole("USUARIO", "ADMIN")
                 // Todo lo demás requiere autenticación

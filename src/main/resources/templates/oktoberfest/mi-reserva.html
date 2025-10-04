@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Reserva - Oktoberfest</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <!-- Logo y título -->
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+                <i class="bi bi-calendar-event me-2 fs-4"></i>
+                <span class="fw-bold">Festival de Octubre</span>
+            </a>
+            
+            <!-- Toggle button para móvil -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Menu items -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <!-- Inicio -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">
+                            <i class="bi bi-house-door me-1"></i>Inicio
+                        </a>
+                    </li>
+                    
+                    <!-- Dashboard -->
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/dashboard}">
+                            <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    
+                    <!-- Oktoberfest activo -->
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/oktoberfest/reservas}">
+                            <i class="bi bi-cup me-1"></i>Oktoberfest
+                        </a>
+                    </li>
+                    
+                    <!-- Admin Panel (solo administradores) -->
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-gear me-1"></i>Administración
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/admin/oktoberfest}">
+                                <i class="bi bi-cup me-2"></i>Administrar Oktoberfest
+                            </a></li>
+                            <li><a class="dropdown-item" th:href="@{/heroes}">
+                                <i class="bi bi-person-badge me-2"></i>Gestionar Héroes
+                            </a></li>
+                            <li><a class="dropdown-item" th:href="@{/intenciones/admin}">
+                                <i class="bi bi-heart me-2"></i>Administrar Intenciones
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <!-- User actions -->
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-2"></i>
+                            <span th:text="${usuario?.nombre ?: #authentication.name}">Usuario</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" th:href="@{/dashboard}">
+                                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" class="d-inline w-100">
+                                    <button type="submit" class="dropdown-item text-danger w-100">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5 pt-4">
+        <!-- Encabezado -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="display-5 text-octubre mb-3">
+                    <i class="bi bi-clipboard-check me-3"></i>Mi Reserva - Oktoberfest
+                </h1>
+                <p class="lead text-muted">
+                    Detalles de tu reserva activa para el Oktoberfest.
+                </p>
+            </div>
+            <div class="col-md-4 text-end">
+                <a th:href="@{/oktoberfest/reservas}" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-arrow-left me-2"></i>Volver
+                </a>
+            </div>
+        </div>
+
+        <!-- Mensajes flash -->
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Detalles de la reserva -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-success text-white text-center py-4">
+                        <h3 class="mb-0">
+                            <i class="bi bi-check-circle-fill me-2"></i>¡Reserva Confirmada!
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Información de la mesa -->
+                        <div class="text-center mb-4">
+                            <i class="bi bi-table display-1 text-success mb-3"></i>
+                            <h2 class="display-4 text-success mb-0">Mesa <span th:text="${mesa.numero}">1</span></h2>
+                        </div>
+
+                        <!-- Detalles de la reserva -->
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card border-primary h-100">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-people-fill text-primary display-5 mb-3"></i>
+                                        <h5 class="card-title">Capacidad</h5>
+                                        <p class="card-text">
+                                            <span class="badge bg-primary fs-5" th:text="${mesa.capacidad + ' personas'}">4 personas</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-info h-100">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-calendar-check text-info display-5 mb-3"></i>
+                                        <h5 class="card-title">Fecha de Reserva</h5>
+                                        <p class="card-text">
+                                            <span th:text="${#temporals.format(reserva.fecha, 'dd/MM/yyyy')}">01/10/2024</span><br>
+                                            <small class="text-muted" th:text="${#temporals.format(reserva.fecha, 'HH:mm')}">14:30</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información del usuario -->
+                        <div class="card border-warning mt-4">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="bi bi-person-circle text-warning me-2"></i>Información del Titular
+                                </h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p class="mb-1"><strong>Nombre:</strong></p>
+                                        <p th:text="${reserva.usuario.nombre}">Usuario</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="mb-1"><strong>Correo:</strong></p>
+                                        <p th:text="${reserva.usuario.correo}">usuario@email.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Código de reserva -->
+                        <div class="alert alert-light border text-center mt-4">
+                            <h6 class="mb-2">Código de Reserva</h6>
+                            <p class="font-monospace fs-4 text-primary mb-0" th:text="'OKTO-' + ${reserva.id}">OKTO-123</p>
+                            <small class="text-muted">Presenta este código al llegar al evento</small>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="d-grid gap-2 mt-4">
+                            <form th:action="@{/oktoberfest/reservas/cancelar-reserva}" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-outline-danger btn-lg w-100" 
+                                        onclick="return confirm('¿Estás seguro de que quieres cancelar tu reserva? Esta acción no se puede deshacer.')">
+                                    <i class="bi bi-x-circle me-2"></i>Cancelar Reserva
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div class="card border-info">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-info-circle me-2"></i>Información del Evento
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="bi bi-geo-alt text-info me-2"></i>
+                                <strong>Ubicación:</strong> Plaza Principal - San Martín
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-clock text-info me-2"></i>
+                                <strong>Horario:</strong> 18:00 - 23:00 hrs
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-calendar-event text-info me-2"></i>
+                                <strong>Fecha:</strong> Durante el Festival de Octubre
+                            </li>
+                            <li class="mb-0">
+                                <i class="bi bi-telephone text-info me-2"></i>
+                                <strong>Información:</strong> (01) 123-4567
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-warning">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Importante
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Llega 15 minutos antes del evento
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Presenta tu código de reserva
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Respeta la capacidad máxima de tu mesa
+                            </li>
+                            <li class="mb-0">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Disfruta responsablemente
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 Festival de Octubre Digital. ¡Salud!</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

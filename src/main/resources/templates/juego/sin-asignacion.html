@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adivina la Canción Criolla - Festival de Octubre</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:replace="~{layout/base :: navbar}"></div>
+
+    <!-- Contenido principal -->
+    <div class="container mt-4">
+        
+        <!-- Alertas -->
+        <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>
+            <span th:text="${mensajeExito}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div th:if="${mensajeError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <span th:text="${mensajeError}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h1 class="display-4 text-primary">
+                    <i class="bi bi-music-note-beamed me-3"></i>
+                    Adivina la Canción Criolla
+                </h1>
+                <p class="lead text-muted">¡Demuestra tu conocimiento de la música criolla peruana!</p>
+            </div>
+        </div>
+
+        <!-- Sin asignación -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-warning text-dark text-center">
+                        <h4 class="mb-0">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            No tienes una canción asignada
+                        </h4>
+                    </div>
+                    <div class="card-body text-center p-5">
+                        <div class="mb-4">
+                            <i class="bi bi-music-note-list display-1 text-muted"></i>
+                        </div>
+                        
+                        <h5 class="mb-3">¿Cómo funciona el juego?</h5>
+                        <div class="row mb-4">
+                            <div class="col-md-4 mb-3">
+                                <div class="feature-box">
+                                    <i class="bi bi-1-circle text-primary fs-1"></i>
+                                    <h6 class="mt-2">Solicita una canción</h6>
+                                    <p class="text-muted small">El administrador te asignará una canción criolla</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="feature-box">
+                                    <i class="bi bi-2-circle text-primary fs-1"></i>
+                                    <h6 class="mt-2">Adivina el título</h6>
+                                    <p class="text-muted small">Intenta adivinar letra por letra el título</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="feature-box">
+                                    <i class="bi bi-3-circle text-primary fs-1"></i>
+                                    <h6 class="mt-2">Gana puntos</h6>
+                                    <p class="text-muted small">Menos intentos = mejor posición en el ranking</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Formulario de solicitud -->
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">Solicitar asignación de canción</h6>
+                                <form th:action="@{/juego/solicitar-asignacion}" method="post">
+                                    <div class="mb-3">
+                                        <label for="mensaje" class="form-label">Mensaje opcional</label>
+                                        <textarea class="form-control" id="mensaje" name="mensaje" rows="2" 
+                                                placeholder="Deja un mensaje para el administrador (opcional)"></textarea>
+                                        <div class="form-text">Por ejemplo: "Me gusta la música criolla" o "Soy principiante"</div>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="bi bi-send me-2"></i>
+                                        Solicitar Asignación
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <p class="text-muted">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Una vez que tengas una canción asignada, podrás empezar a jugar
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enlaces adicionales -->
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <a th:href="@{/juego/ranking}" class="btn btn-outline-primary me-3">
+                    <i class="bi bi-trophy me-2"></i>Ver Ranking
+                </a>
+                <a th:href="@{/dashboard}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Volver al Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 Festival de Octubre Digital. ¡Que viva la música criolla!</p>
+        </div>
+    </footer>
+
+</body>
+</html>

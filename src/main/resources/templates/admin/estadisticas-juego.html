@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas del Juego - Admin</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    
+    <style>
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-icon {
+            font-size: 3rem;
+            opacity: 0.8;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-custom {
+            height: 25px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .table-stats {
+            font-size: 0.9rem;
+        }
+        
+        .badge-large {
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:replace="~{layout/base :: navbar}"></div>
+
+    <!-- Contenido principal -->
+    <div class="container mt-4">
+
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="display-5 text-primary">
+                            <i class="bi bi-graph-up me-3"></i>
+                            Estadísticas del Juego
+                        </h1>
+                        <p class="text-muted">Panel de control y métricas del juego de Canción Criolla</p>
+                    </div>
+                    <div>
+                        <a th:href="@{/admin/juego/asignar}" class="btn btn-outline-primary me-2">
+                            <i class="bi bi-music-note-list me-2"></i>Asignar Canciones
+                        </a>
+                        <a th:href="@{/admin/juego/solicitudes}" class="btn btn-outline-warning">
+                            <i class="bi bi-envelope me-2"></i>Solicitudes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estadísticas principales -->
+        <div class="row mb-5">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stat-card h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-people stat-icon"></i>
+                        <h2 class="mt-3" th:text="${totalJugadores}">25</h2>
+                        <p class="mb-0">Jugadores Registrados</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stat-card h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-controller stat-icon"></i>
+                        <h2 class="mt-3" th:text="${asignacionesActivas}">12</h2>
+                        <p class="mb-0">Juegos en Progreso</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stat-card h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-check-circle stat-icon"></i>
+                        <h2 class="mt-3" th:text="${juegosCompletados}">8</h2>
+                        <p class="mb-0">Juegos Completados</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card stat-card h-100">
+                    <div class="card-body text-center">
+                        <i class="bi bi-music-note-list stat-icon"></i>
+                        <h2 class="mt-3" th:text="${cancionesDisponibles}">15</h2>
+                        <p class="mb-0">Canciones Disponibles</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Métricas detalladas -->
+        <div class="row mb-4">
+            <div class="col-lg-6 mb-4">
+                <div class="card chart-card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-pie-chart me-2"></i>
+                            Distribución de Estados
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <i class="bi bi-play-circle text-warning fs-1"></i>
+                                    <h4 th:text="${asignacionesActivas}">12</h4>
+                                    <small class="text-muted">En Progreso</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <i class="bi bi-check-circle text-success fs-1"></i>
+                                    <h4 th:text="${juegosCompletados}">8</h4>
+                                    <small class="text-muted">Completados</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <i class="bi bi-clock text-info fs-1"></i>
+                                    <h4 th:text="${solicitudesPendientes}">5</h4>
+                                    <small class="text-muted">Solicitudes</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Barras de progreso -->
+                        <div class="mt-4">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span>Tasa de Completado</span>
+                                    <span th:text="${tasaCompletado + '%'}">40%</span>
+                                </div>
+                                <div class="progress progress-custom">
+                                    <div class="progress-bar bg-success" role="progressbar" 
+                                         th:style="'width: ' + ${tasaCompletado} + '%'"
+                                         th:text="${tasaCompletado + '%'}">40%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span>Participación</span>
+                                    <span th:text="${tasaParticipacion + '%'}">80%</span>
+                                </div>
+                                <div class="progress progress-custom">
+                                    <div class="progress-bar bg-info" role="progressbar" 
+                                         th:style="'width: ' + ${tasaParticipacion} + '%'"
+                                         th:text="${tasaParticipacion + '%'}">80%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 mb-4">
+                <div class="card chart-card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-bar-chart me-2"></i>
+                            Métricas de Rendimiento
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6 mb-3 text-center">
+                                <h3 class="text-primary" th:text="${promedioIntentos}">5.2</h3>
+                                <small class="text-muted">Promedio de Intentos</small>
+                            </div>
+                            <div class="col-6 mb-3 text-center">
+                                <h3 class="text-success" th:text="${mejorPuntuacion}">3</h3>
+                                <small class="text-muted">Mejor Puntuación</small>
+                            </div>
+                            <div class="col-6 mb-3 text-center">
+                                <h3 class="text-info" th:text="${totalIntentos}">156</h3>
+                                <small class="text-muted">Total Intentos</small>
+                            </div>
+                            <div class="col-6 mb-3 text-center">
+                                <h3 class="text-warning" th:text="${cancionesMasJugadas}">5</h3>
+                                <small class="text-muted">Canciones Más Jugadas</small>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="text-center">
+                            <h6 class="text-muted mb-3">Distribución de Intentos</h6>
+                            <div class="row">
+                                <div class="col-3">
+                                    <span class="badge bg-success badge-large">1-3</span>
+                                    <div><small th:text="${intentos1a3}">2</small></div>
+                                </div>
+                                <div class="col-3">
+                                    <span class="badge bg-warning badge-large">4-6</span>
+                                    <div><small th:text="${intentos4a6}">4</small></div>
+                                </div>
+                                <div class="col-3">
+                                    <span class="badge bg-info badge-large">7-10</span>
+                                    <div><small th:text="${intentos7a10}">2</small></div>
+                                </div>
+                                <div class="col-3">
+                                    <span class="badge bg-danger badge-large">10+</span>
+                                    <div><small th:text="${intentos10mas}">0</small></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Rankings -->
+        <div class="row mb-4">
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">
+                            <i class="bi bi-trophy me-2"></i>
+                            Top 5 Mejores Jugadores
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div th:if="${#lists.isEmpty(topJugadores)}" class="text-center p-4">
+                            <i class="bi bi-trophy text-muted fs-1"></i>
+                            <p class="text-muted mt-2">No hay datos de ranking</p>
+                        </div>
+                        
+                        <div th:unless="${#lists.isEmpty(topJugadores)}" class="table-responsive">
+                            <table class="table table-stats mb-0">
+                                <tbody>
+                                    <tr th:each="jugador, iterStat : ${topJugadores}">
+                                        <td width="50" class="text-center">
+                                            <span th:if="${iterStat.index == 0}" class="badge bg-warning">🥇</span>
+                                            <span th:if="${iterStat.index == 1}" class="badge bg-secondary">🥈</span>
+                                            <span th:if="${iterStat.index == 2}" class="badge bg-warning text-dark">🥉</span>
+                                            <span th:if="${iterStat.index > 2}" class="badge bg-light text-dark" 
+                                                  th:text="${iterStat.index + 1}">4</span>
+                                        </td>
+                                        <td>
+                                            <strong th:text="${jugador.usuario.nombre}">Nombre</strong>
+                                            <br>
+                                            <small class="text-muted" th:text="${jugador.cancion.titulo}">Canción</small>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-primary" th:text="${jugador.intentos}">3</span>
+                                            <div><small class="text-muted">intentos</small></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-music-note-beamed me-2"></i>
+                            Canciones Más Populares
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div th:if="${#lists.isEmpty(cancionesPopulares)}" class="text-center p-4">
+                            <i class="bi bi-music-note-list text-muted fs-1"></i>
+                            <p class="text-muted mt-2">No hay datos de popularidad</p>
+                        </div>
+                        
+                        <div th:unless="${#lists.isEmpty(cancionesPopulares)}" class="table-responsive">
+                            <table class="table table-stats mb-0">
+                                <tbody>
+                                    <tr th:each="stats : ${cancionesPopulares}">
+                                        <td>
+                                            <strong th:text="${stats.titulo}">Título Canción</strong>
+                                            <br>
+                                            <small class="text-muted" th:text="${stats.artista}">Artista</small>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-info" th:text="${stats.vecesAsignada}">5</span>
+                                            <div><small class="text-muted">asignada</small></div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-success" th:text="${stats.vecesCompletada}">3</span>
+                                            <div><small class="text-muted">completada</small></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actividad reciente -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-clock-history me-2"></i>
+                            Actividad Reciente
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div th:if="${#lists.isEmpty(actividadReciente)}" class="text-center p-4">
+                            <i class="bi bi-clock text-muted fs-1"></i>
+                            <p class="text-muted mt-2">No hay actividad reciente</p>
+                        </div>
+                        
+                        <div th:unless="${#lists.isEmpty(actividadReciente)}" class="table-responsive">
+                            <table class="table table-stats mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Usuario</th>
+                                        <th>Evento</th>
+                                        <th>Canción</th>
+                                        <th>Fecha</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="actividad : ${actividadReciente}">
+                                        <td th:text="${actividad.usuario.nombre}">Usuario</td>
+                                        <td>
+                                            <span th:if="${actividad.adivinada}" class="text-success">
+                                                <i class="bi bi-check-circle me-1"></i>Completó juego
+                                            </span>
+                                            <span th:unless="${actividad.adivinada}" class="text-info">
+                                                <i class="bi bi-play-circle me-1"></i>Inició juego
+                                            </span>
+                                        </td>
+                                        <td th:text="${actividad.cancion.titulo}">Canción</td>
+                                        <td>
+                                            <small th:text="${#temporals.format(actividad.fechaAsignacion, 'dd/MM/yyyy HH:mm')}">
+                                                15/10/2024 14:30
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <span th:if="${actividad.adivinada}" class="badge bg-success">Completado</span>
+                                            <span th:unless="${actividad.adivinada}" class="badge bg-warning text-dark">
+                                                En progreso (<span th:text="${actividad.intentos}">3</span> intentos)
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enlaces de navegación -->
+        <div class="row mt-4 mb-4">
+            <div class="col-12 text-center">
+                <a th:href="@{/admin/juego/asignar}" class="btn btn-primary me-3">
+                    <i class="bi bi-music-note-list me-2"></i>Asignar Canciones
+                </a>
+                <a th:href="@{/admin/juego/solicitudes}" class="btn btn-warning me-3">
+                    <i class="bi bi-envelope me-2"></i>Gestionar Solicitudes
+                </a>
+                <a th:href="@{/dashboard}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Volver al Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 Festival de Octubre Digital - Panel de Administración</p>
+        </div>
+    </footer>
+
+</body>
+</html>

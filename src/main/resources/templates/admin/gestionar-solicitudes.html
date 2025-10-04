@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Solicitudes - Admin</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <!-- Navbar -->
+    <div th:replace="~{layout/base :: navbar}"></div>
+
+    <!-- Contenido principal -->
+    <div class="container mt-4">
+
+        <!-- Alertas -->
+        <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>
+            <span th:text="${mensajeExito}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div th:if="${mensajeError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <span th:text="${mensajeError}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="display-5 text-primary">
+                            <i class="bi bi-envelope-open me-3"></i>
+                            Gestionar Solicitudes
+                        </h1>
+                        <p class="text-muted">Administra las solicitudes de asignación de canciones</p>
+                    </div>
+                    <div>
+                        <a th:href="@{/admin/juego/asignar}" class="btn btn-outline-primary me-2">
+                            <i class="bi bi-music-note-list me-2"></i>Asignar Canciones
+                        </a>
+                        <a th:href="@{/admin/juego/estadisticas}" class="btn btn-outline-info">
+                            <i class="bi bi-graph-up me-2"></i>Estadísticas
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estadísticas rápidas -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card bg-warning text-dark">
+                    <div class="card-body text-center">
+                        <i class="bi bi-clock-history fs-1"></i>
+                        <h3 th:text="${solicitudesPendientes}">5</h3>
+                        <p class="mb-0">Pendientes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center">
+                        <i class="bi bi-check-circle fs-1"></i>
+                        <h3 th:text="${solicitudesProcesadas}">12</h3>
+                        <p class="mb-0">Procesadas</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-danger text-white">
+                    <div class="card-body text-center">
+                        <i class="bi bi-x-circle fs-1"></i>
+                        <h3 th:text="${solicitudesRechazadas}">2</h3>
+                        <p class="mb-0">Rechazadas</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body text-center">
+                        <i class="bi bi-list fs-1"></i>
+                        <h3 th:text="${totalSolicitudes}">19</h3>
+                        <p class="mb-0">Total</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form th:action="@{/admin/juego/solicitudes}" method="get" class="row g-3">
+                            <div class="col-md-3">
+                                <label for="estado" class="form-label">Estado</label>
+                                <select class="form-select" id="estado" name="estado">
+                                    <option value="">Todos los estados</option>
+                                    <option value="PENDIENTE" th:selected="${estado == 'PENDIENTE'}">Pendientes</option>
+                                    <option value="PROCESADA" th:selected="${estado == 'PROCESADA'}">Procesadas</option>
+                                    <option value="RECHAZADA" th:selected="${estado == 'RECHAZADA'}">Rechazadas</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="ordenar" class="form-label">Ordenar por</label>
+                                <select class="form-select" id="ordenar" name="ordenar">
+                                    <option value="fecha_desc" th:selected="${ordenar == 'fecha_desc'}">Más recientes</option>
+                                    <option value="fecha_asc" th:selected="${ordenar == 'fecha_asc'}">Más antiguos</option>
+                                    <option value="usuario" th:selected="${ordenar == 'usuario'}">Usuario</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="buscar" class="form-label">Buscar usuario</label>
+                                <input type="text" class="form-control" id="buscar" name="buscar" 
+                                       th:value="${buscar}" placeholder="Nombre o email...">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">&nbsp;</label>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-search me-2"></i>Filtrar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de solicitudes -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">
+                            <i class="bi bi-list me-2"></i>
+                            Solicitudes de Asignación
+                        </h4>
+                    </div>
+                    <div class="card-body p-0">
+                        <div th:if="${#lists.isEmpty(solicitudes)}" class="text-center p-5">
+                            <i class="bi bi-inbox display-1 text-muted"></i>
+                            <h5 class="text-muted mt-3">No hay solicitudes</h5>
+                            <p class="text-muted">No se encontraron solicitudes con los filtros aplicados</p>
+                        </div>
+                        
+                        <div th:unless="${#lists.isEmpty(solicitudes)}" class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Usuario</th>
+                                        <th>Email</th>
+                                        <th>Mensaje</th>
+                                        <th>Fecha Solicitud</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="solicitud : ${solicitudes}" 
+                                        th:class="${solicitud.estado == 'PENDIENTE' ? 'table-warning' : ''}">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-3">
+                                                    <i th:if="${solicitud.estado == 'PENDIENTE'}" 
+                                                       class="bi bi-clock text-warning fs-4"></i>
+                                                    <i th:if="${solicitud.estado == 'PROCESADA'}" 
+                                                       class="bi bi-check-circle text-success fs-4"></i>
+                                                    <i th:if="${solicitud.estado == 'RECHAZADA'}" 
+                                                       class="bi bi-x-circle text-danger fs-4"></i>
+                                                </div>
+                                                <div>
+                                                    <strong th:text="${solicitud.usuario.nombre}">Nombre Usuario</strong>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted" th:text="${solicitud.usuario.correo}">email@example.com</small>
+                                        </td>
+                                        <td>
+                                            <div th:if="${solicitud.mensaje and !#strings.isEmpty(solicitud.mensaje)}">
+                                                <span th:text="${#strings.abbreviate(solicitud.mensaje, 50)}">Mensaje del usuario...</span>
+                                                <i th:if="${#strings.length(solicitud.mensaje) > 50}" 
+                                                   class="bi bi-eye text-primary" 
+                                                   title="Ver mensaje completo" 
+                                                   style="cursor: pointer;"></i>
+                                            </div>
+                                            <small th:unless="${solicitud.mensaje and !#strings.isEmpty(solicitud.mensaje)}" 
+                                                   class="text-muted fst-italic">Sin mensaje</small>
+                                        </td>
+                                        <td>
+                                            <span th:text="${#temporals.format(solicitud.fechaSolicitud, 'dd/MM/yyyy')}">15/10/2024</span>
+                                            <br>
+                                            <small class="text-muted" th:text="${#temporals.format(solicitud.fechaSolicitud, 'HH:mm')}">14:30</small>
+                                        </td>
+                                        <td>
+                                            <span th:if="${solicitud.estado == 'PENDIENTE'}" class="badge bg-warning text-dark">
+                                                <i class="bi bi-clock me-1"></i>Pendiente
+                                            </span>
+                                            <span th:if="${solicitud.estado == 'PROCESADA'}" class="badge bg-success">
+                                                <i class="bi bi-check-circle me-1"></i>Procesada
+                                            </span>
+                                            <span th:if="${solicitud.estado == 'RECHAZADA'}" class="badge bg-danger">
+                                                <i class="bi bi-x-circle me-1"></i>Rechazada
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div th:if="${solicitud.estado == 'PENDIENTE'}" class="btn-group" role="group">
+                                                <!-- Procesar directamente -->
+                                                <form th:action="@{/admin/juego/procesar-solicitud}" method="post" style="display: inline;">
+                                                    <input type="hidden" name="solicitudId" th:value="${solicitud.id}">
+                                                    <input type="hidden" name="accion" value="PROCESAR">
+                                                    <button type="submit" class="btn btn-sm btn-success" 
+                                                            title="Procesar y asignar automáticamente">
+                                                        <i class="bi bi-check-circle"></i>
+                                                    </button>
+                                                </form>
+                                                
+                                                <!-- Rechazar -->
+                                                <form th:action="@{/admin/juego/procesar-solicitud}" method="post" style="display: inline;">
+                                                    <input type="hidden" name="solicitudId" th:value="${solicitud.id}">
+                                                    <input type="hidden" name="accion" value="RECHAZAR">
+                                                    <button type="submit" class="btn btn-sm btn-danger" 
+                                                            title="Rechazar solicitud"
+                                                            onclick="return confirm('¿Estás seguro de rechazar esta solicitud?')">
+                                                        <i class="bi bi-x-circle"></i>
+                                                    </button>
+                                                </form>
+                                                
+                                                <!-- Asignar manualmente -->
+                                                <button type="button" class="btn btn-sm btn-primary" 
+                                                        title="Asignar canción específica"
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#asignarModal"
+                                                        th:onclick="'prepararAsignacion(' + ${solicitud.id} + ', \'' + ${solicitud.usuario.nombre} + '\')'">
+                                                    <i class="bi bi-music-note"></i>
+                                                </button>
+                                            </div>
+                                            
+                                            <div th:unless="${solicitud.estado == 'PENDIENTE'}">
+                                                <small class="text-muted">
+                                                    <span th:text="${#temporals.format(solicitud.fechaProcesamiento, 'dd/MM/yyyy HH:mm')}">
+                                                        16/10/2024 10:15
+                                                    </span>
+                                                </small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div th:unless="${#lists.isEmpty(solicitudes)}" class="card-footer">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <small class="text-muted">
+                                    Mostrando <strong th:text="${solicitudes.size()}">10</strong> solicitudes
+                                </small>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <small class="text-muted">
+                                    Pendientes: <strong th:text="${#lists.size(#lists.select(solicitudes, '[estado] == \'PENDIENTE\''))}">3</strong>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enlaces de navegación -->
+        <div class="row mt-4 mb-4">
+            <div class="col-12 text-center">
+                <a th:href="@{/admin/juego/asignar}" class="btn btn-primary me-3">
+                    <i class="bi bi-music-note-list me-2"></i>Asignar Canciones
+                </a>
+                <a th:href="@{/admin/juego/estadisticas}" class="btn btn-info me-3">
+                    <i class="bi bi-graph-up me-2"></i>Ver Estadísticas
+                </a>
+                <a th:href="@{/dashboard}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Volver al Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para asignación manual -->
+    <div class="modal fade" id="asignarModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form th:action="@{/admin/juego/procesar-solicitud}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Asignar Canción Específica</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="solicitudId" id="modalSolicitudId">
+                        <input type="hidden" name="accion" value="ASIGNAR_MANUAL">
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Usuario:</label>
+                            <p class="form-control-plaintext" id="modalUsuarioNombre">Nombre del usuario</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="modalCancionId" class="form-label">Seleccionar Canción</label>
+                            <select class="form-select" id="modalCancionId" name="cancionId" required>
+                                <option value="">Seleccionar canción...</option>
+                                <option th:each="cancion : ${canciones}" 
+                                        th:value="${cancion.id}" 
+                                        th:text="${cancion.titulo + ' - ' + cancion.artista}">
+                                    La Flor de la Canela - Chabuca Granda
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>Asignar Canción
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 Festival de Octubre Digital - Panel de Administración</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function prepararAsignacion(solicitudId, usuarioNombre) {
+            document.getElementById('modalSolicitudId').value = solicitudId;
+            document.getElementById('modalUsuarioNombre').textContent = usuarioNombre;
+        }
+    </script>
+
+</body>
+</html>
